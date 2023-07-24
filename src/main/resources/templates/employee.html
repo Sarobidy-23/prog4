@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Employee lists</h1>
+    <form class="form-card px-3" th:action="@{/employee/filter}" method="post" enctype="multipart/form-data">
+        <h5 class="text-center m-4">Filter</h5>
+        <div class="row text-left">
+            <div class="form-group flex-column d-flex m-2" >
+                <label class="form-control-label" for="sex">Sex</label>
+                <select id="sex" class="form-control" name="sex" th:value="${{sex}}">
+                    <option value="man" selected>Man</option>
+                    <option value="woman">Woman</option>
+                </select>
+            </div>
+            <div class="form-group flex-column d-flex m-2">
+                <label class="form-control-label" for="firstname">Firstname</label>
+                <input class="form-control"
+                       name="firstname"
+                       type="text"
+                       th:value="${{firstname}}"
+                       id="firstname">
+            </div>
+            <div class="form-group flex-column d-flex m-2">
+                <label class="form-control-label" for="lastname">Lastname</label>
+                <input class="form-control"
+                       name="lastname"
+                       type="text"
+                       th:value="${{firstname}}"
+                       id="lastname">
+            </div>
+            <div class="form-group flex-column d-flex m-2">
+                <label class="form-control-label" for="office">Office</label>
+                <input class="form-control"
+                       name="office"
+                       type="text"
+                       th:value="${{office}}"
+                       id="office">
+            </div>
+            <button type="submit">filter</button>
+        </div>
+    </form>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Office</th>
+                <th>Sex</th>
+                <th>Entrance date</th>
+                <th>Exit date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="employee: ${employees}">
+                <td th:text="${{employee.firstname}}"></td>
+                <td th:text="${{employee.lastname}}"></td>
+                <td th:text="${{employee.office}}"></td>
+                <td th:text="${{employee.sex}}"></td>
+                <td th:text="${{employee.entranceDate}}"></td>
+                <td th:text="${{employee.exitDate}}"></td>
+                <td>
+                    <a th:href="@{/employee/details(employeeId=${employee.id})}">Details</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/employee/create}">New employee</a>
+</body>
+</html>

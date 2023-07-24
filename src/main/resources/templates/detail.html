@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/style.css}" rel="stylesheet" />
+    <title>Fiche</title>
+</head>
+<body>
+    <div th:object="${employee}">
+        <img th:src="'data:image/*;base64,'+${{employee.image}}" alt="Aucune image">
+        <h4>Firstname</h4>
+        <span th:text="${{employee.firstname}}"></span>
+        <h4>Lastname</h4>
+        <span th:text="${{employee.lastname}}"></span>
+        <h4>Birthdate</h4>
+        <span th:text="${{employee.birthdate}}"></span>
+        <h4>Office</h4>
+        <span th:text="${{employee.office}}"></span>
+        <h4>Phone</h4>
+        <span th:text="${{employee.phone}}"></span>
+    </div>
+</body>
+</html>
