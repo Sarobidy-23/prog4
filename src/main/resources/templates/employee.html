@@ -13,7 +13,7 @@
             <div class="form-group flex-column d-flex m-2" >
                 <label class="form-control-label" for="sex">Sex</label>
                 <select id="sex" class="form-control" name="sex" th:value="${{sex}}">
-                    <option value="man" selected>Man</option>
+                    <option value="man">Man</option>
                     <option value="woman">Woman</option>
                 </select>
             </div>
@@ -34,6 +34,38 @@
                        id="lastname">
             </div>
             <div class="form-group flex-column d-flex m-2">
+                <label class="form-control-label" for="entranceDateStart">Entrance Date Start:</label>
+                <input class="form-control"
+                       name="entranceDateStart"
+                       type="date"
+                       th:value="${{entranceDateStart}}"
+                       id="entranceDateStart">
+            </div>
+            <div class="form-group flex-column d-flex m-2">
+                <label class="form-control-label" for="entranceDateEnd">Entrance Date End:</label>
+                <input class="form-control"
+                       name="entranceDateEnd"
+                       type="date"
+                       th:value="${{entranceDateEnd}}"
+                       id="entranceDateEnd">
+            </div>
+            <div class="form-group flex-column d-flex m-2">
+                <label class="form-control-label" for="exitDateStart">Exit Date Start:</label>
+                <input class="form-control"
+                       name="exitDateStart"
+                       type="date"
+                       th:value="${{exitDateStart}}"
+                       id="exitDateStart">
+            </div>
+            <div class="form-group flex-column d-flex m-2">
+                <label class="form-control-label" for="exitDateEnd">Exit Date End:</label>
+                <input class="form-control"
+                       name="exitDateEnd"
+                       type="date"
+                       th:value="${{exitDateEnd}}"
+                       id="exitDateEnd">
+            </div>
+            <div class="form-group flex-column d-flex m-2">
                 <label class="form-control-label" for="post">Post</label>
                 <input class="form-control"
                        name="post"
@@ -44,6 +76,7 @@
             <button type="submit">filter</button>
         </div>
     </form>
+    <a th:href="@{/employee/export}">Export csv</a>
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>

@@ -2,12 +2,15 @@ package com.example.demo.service;
 
 import com.example.demo.model.EmployeeEntity;
 import com.example.demo.repository.EmployeeRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,9 +40,14 @@ public class EmployeeService {
                                             String lastname,
                                             String sex,
                                             String post,
+                                            LocalDate entranceDateStart,
+                                            LocalDate entranceDateEnd,
+                                            LocalDate exitDateStart,
+                                            LocalDate exitDateEnd,
                                             int page, int pageSize) {
 
       Pageable pageable = PageRequest.of(page, pageSize);
-      return repository.getEmployeeEntitiesWithFilter(firstname, lastname, post,sex, pageable);
+      return repository.getEmployeeEntitiesWithFilter(firstname, lastname, post,sex, entranceDateStart,
+          entranceDateEnd, exitDateStart, exitDateEnd, pageable);
   }
 }

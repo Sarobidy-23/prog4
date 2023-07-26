@@ -50,4 +50,26 @@ public class EmployeeMapper {
         .matricule(entity.getMatricule())
         .build();
   }
+
+  public EmployeeForm toUpdate(EmployeeForm form, EmployeeEntity entity) {
+    EmployeeForm toUpdate = toForm(entity);
+    toUpdate.setId(form.getId());
+    toUpdate.setId(entity.getId());
+    toUpdate.setFirstname(entity.getFirstname());
+    toUpdate.setLastname(entity.getLastname());
+    toUpdate.setAddress(entity.getAddress());
+    toUpdate.setEmail(entity.getEmail());
+    toUpdate.setBirthdate(entity.getBirthdate());
+    toUpdate.setCinNumber(entity.getCinNumber());
+    toUpdate.setCinDate(entity.getCinDate());
+    toUpdate.setCinLocation(entity.getCinLocation());
+    toUpdate.setSex(entity.getSex());
+    toUpdate.setEntranceDate(entity.getEntranceDate());
+    toUpdate.setPost(entity.getPost());
+    toUpdate.setPhone(entity.getPhone());
+    toUpdate.setChildren(entity.getChildren());
+    toUpdate.setCnaps(entity.getCnaps());
+    toUpdate.setMatricule(entity.getMatricule());
+    return toUpdate;
+  }
 }

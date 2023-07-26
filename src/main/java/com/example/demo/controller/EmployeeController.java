@@ -5,21 +5,32 @@ import com.example.demo.model.EmployeeEntity;
 import com.example.demo.model.EmployeeForm;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.validator.EmployeeValidator;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.awt.print.Pageable;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Controller
@@ -28,6 +39,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class EmployeeController implements WebMvcConfigurer {
   private final EmployeeService service;
   private final EmployeeMapper mapper;
+  private final EmployeeValidator validator;
   @GetMapping("employee")
   public String List(Model model,
                      @RequestParam(defaultValue = "0", required = false)int page,
@@ -35,8 +47,14 @@ public class EmployeeController implements WebMvcConfigurer {
                      @RequestParam(required = false, name = "sex")String sex,
                      @RequestParam(required = false, name = "firstname")String firstname,
                      @RequestParam(required = false, name = "lastname")String lastname,
-                     @RequestParam(required = false, name = "post")String post) {
-    List<EmployeeEntity> resultFilter = service.getWithFilter(firstname, lastname, sex, post, page, pageSize);
+                     @RequestParam(required = false, name = "post")String post,
+                     @RequestParam(required = false, name = "entranceDateStart")LocalDate entranceDateStart,
+                     @RequestParam(required = false, name = "entranceDateEnd")LocalDate entranceDateEnd,
+                     @RequestParam(required = false, name = "exitDateStart")LocalDate exitDateStart,
+                     @RequestParam(required = false, name = "exitDateEnd")LocalDate exitDateEnd,
+                     @RequestParam(required = false, name = "firstnameOrder")String firstnameOrder) {
+    List<EmployeeEntity> resultFilter = service.getWithFilter(firstname, lastname, sex, post,
+        entranceDateStart, entranceDateEnd, exitDateStart, exitDateEnd, page, pageSize);
     model.addAttribute("employees", resultFilter);
     return "employee";
   }
@@ -60,18 +78,40 @@ public class EmployeeController implements WebMvcConfigurer {
     return "edit";
   }
 
-
+  @GetMapping("employee/export")
+  @ResponseBody
+  public void exportCSV(HttpServletResponse response) {
+    response.setContentType("text/csv");
+    response.setHeader("Content-Disposition", "attachment; filename=employeeList.csv");
+    List<EmployeeEntity> entities = service.getAll(1,15);
+    try {
+      CSVExporter(response.getWriter(), entities);
+    } catch (Exception err) {
+      throw new RuntimeException(err.getMessage());
+    }
+  }
 
   @PostMapping("employee/edit")
   public String editAction(@Valid @ModelAttribute EmployeeForm form, BindingResult bindingResult, Model model,
                            @RequestParam("id")String id) {
-    form.setId(Long.valueOf(id));
-    return saveForm(form, bindingResult, model, form);
+    EmployeeEntity employee = service.findById(id);
+    EmployeeForm toSaved = mapper.toUpdate(form, employee);
+    String errors = validator.validateForm(form);
+    if (!errors.isEmpty()) {
+      ObjectError newError = new ObjectError("Global", errors);
+      bindingResult.addError(newError);
+    }
+    return saveForm(form, bindingResult, model, toSaved);
   }
 
   @PostMapping("employee/new")
   public String postCreate(@Valid @ModelAttribute EmployeeForm form, BindingResult bindingResult, Model model) {
     EmployeeForm initial = EmployeeForm.builder().build();
+    String errors = validator.validateForm(form);
+    if (!errors.isEmpty()) {
+      ObjectError newError = new ObjectError("Global", errors);
+      bindingResult.addError(newError);
+    }
     return saveForm(form, bindingResult, model, initial);
   }
 
@@ -79,6 +119,11 @@ public class EmployeeController implements WebMvcConfigurer {
       @ModelAttribute @Valid EmployeeForm form,
       BindingResult bindingResult, Model model, EmployeeForm initial) {
     System.out.println(bindingResult.getAllErrors());
+    String errors = validator.validateForm(form);
+    if (!errors.isEmpty()) {
+      ObjectError newError = new ObjectError("Global", errors);
+      bindingResult.addError(newError);
+    }
     if (bindingResult.hasErrors()) {
       model.addAttribute("employee", initial);
       model.addAttribute("errors", bindingResult.getAllErrors());
@@ -93,4 +138,30 @@ public class EmployeeController implements WebMvcConfigurer {
     }
     return "redirect:/employee";
   }
+
+  public void CSVExporter(PrintWriter writer, List<EmployeeEntity> employeeList) {
+    String separator = ",";
+    writer.println("Firstname, Lastname, Sex, Address, Phone, CNAPS number, Children in charge, Email, Post in entreprise," +
+        "Matricule, CIN number, CIN date delivrance, CIN place delivrance, Hire date, Hire end date");
+    for (EmployeeEntity employee : employeeList) {
+      writer.println(
+          employee.getFirstname() + separator +
+          employee.getLastname() + separator +
+          employee.getSex() + separator +
+          employee.getAddress() + separator +
+          employee.getPhone() + separator +
+          employee.getCnaps() + separator +
+          employee.getChildren() + separator +
+          employee.getEmail() + separator +
+          employee.getPost() + separator +
+          employee.getMatricule() + separator +
+          employee.getCinNumber() + separator +
+          employee.getCinDate() + separator +
+          employee.getCinLocation() + separator +
+          employee.getEntranceDate() + separator +
+          employee.getExitDate() + separator
+      );
+    }
+  }
+
 }
