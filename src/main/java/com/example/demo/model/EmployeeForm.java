@@ -1,7 +1,5 @@
 package com.example.demo.model;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDate;
@@ -9,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
 @Builder
@@ -17,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeForm {
+  private Long id;
   @NotEmpty(message = "Required field")
   private String firstname;
   @NotEmpty(message = "Required field")
@@ -26,7 +24,10 @@ public class EmployeeForm {
   private MultipartFile image;
   private LocalDate birthdate;
   private String phone;
-  private String office;
+  private String post;
+  private String cinNumber;
+  private LocalDate cinDate;
+  private String cinLocation;
   @Email
   private String email;
   private int children;

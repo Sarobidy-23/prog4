@@ -12,14 +12,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<EmployeeEntity, String> {
-  @Query( nativeQuery = true, value = "SELECT * FROM employee e WHERE " +
+  @Query( value = "SELECT * FROM employee e WHERE " +
       "(:firstname is null or e.firstname ilike concat('%', :firstname, '%')) " +
       "AND (:lastname is null or e.lastname ilike concat('%', :lastname, '%')) "+
-      "AND (:office is null or e.office ilike concat('%', :office, '%'))" +
-      "AND (:sex is null or e.sex= :sex); ")
+      "AND (:post is null or e.post ilike concat('%', :post, '%'))" +
+      "AND (:sex is null or e.sex= :sex); ",nativeQuery = true)
   List<EmployeeEntity> getEmployeeEntitiesWithFilter(@Param("firstname")String firstname,
                                          @Param("lastname")String lastname,
-                                         @Param("office")String office,
+                                         @Param("post")String post,
                                          @Param("sex")String sex,
                                          Pageable pageable);
 }

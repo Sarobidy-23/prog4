@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
-    <title>Create</title>
+    <title>Edit</title>
 </head>
 <body>
 <div class="container-fluid px-1 py-5 mx-auto">
     <div class="row d-flex justify-content-center">
         <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
             <div class="card">
-                <h5 class="text-center m-4">New employee</h5>
-                <form class="form-card px-3" th:action="@{/employee/new}" method="post" th:object="${employee}" enctype="multipart/form-data">
+                <h5 class="text-center m-4">Edit employee</h5>
+                <form class="form-card px-3" th:object="${employee}" th:action="@{/employee/edit}" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="id">ID:</label>
+                        <input type="number" class="form-control" id="id" name="id" th:field="*{id}" required readonly>
+                    </div>
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="firstname">Firstname</label>
@@ -20,7 +24,6 @@
                                    type="text"
                                    th:field="*{firstname}"
                                    id="firstname">
-                            <p th:if="${#fields.hasErrors('firstname')}" class="text-danger" th:errors="*{firstname}">Invalid firstname</p>
                         </div>
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="lastname">Lastname</label>
@@ -47,7 +50,8 @@
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="image">Image</label>
-                            <input class="form-control form-control-file" type="file" accept="image/*" th:field="*{image}" name="image" id="image">
+                            <input class="form-control form-control-file" type="file" accept="image/*"
+                                   th:value="*{image}"  name="image" id="image">
                         </div>
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="birthdate">Birthdate</label>
@@ -104,7 +108,7 @@
                             <input class="form-control" id="cinLocation" type="text" th:field="*{cinLocation}">
                         </div>
                     </div>
-                    <button type="submit">Add</button>
+                    <button type="submit">Edit</button>
                 </form>
             </div>
         </div>

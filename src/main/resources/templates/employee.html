@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Employee lists</h1>
-    <form class="form-card px-3" th:action="@{/employee/filter}" method="post" enctype="multipart/form-data">
+    <form class="form-card px-3" th:action="@{/employee}" method="get" enctype="multipart/form-data">
         <h5 class="text-center m-4">Filter</h5>
         <div class="row text-left">
             <div class="form-group flex-column d-flex m-2" >
@@ -34,12 +34,12 @@
                        id="lastname">
             </div>
             <div class="form-group flex-column d-flex m-2">
-                <label class="form-control-label" for="office">Office</label>
+                <label class="form-control-label" for="post">Post</label>
                 <input class="form-control"
-                       name="office"
+                       name="post"
                        type="text"
-                       th:value="${{office}}"
-                       id="office">
+                       th:value="${{post}}"
+                       id="post">
             </div>
             <button type="submit">filter</button>
         </div>
@@ -49,7 +49,7 @@
             <tr>
                 <th>Firstname</th>
                 <th>Lastname</th>
-                <th>Office</th>
+                <th>Post</th>
                 <th>Sex</th>
                 <th>Entrance date</th>
                 <th>Exit date</th>
@@ -60,12 +60,13 @@
             <tr th:each="employee: ${employees}">
                 <td th:text="${{employee.firstname}}"></td>
                 <td th:text="${{employee.lastname}}"></td>
-                <td th:text="${{employee.office}}"></td>
+                <td th:text="${{employee.post}}"></td>
                 <td th:text="${{employee.sex}}"></td>
                 <td th:text="${{employee.entranceDate}}"></td>
                 <td th:text="${{employee.exitDate}}"></td>
                 <td>
                     <a th:href="@{/employee/details(employeeId=${employee.id})}">Details</a>
+                    <a th:href="@{/employee/edit(employeeId=${employee.id})}">Edit</a>
                 </td>
             </tr>
         </tbody>

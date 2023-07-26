@@ -30,12 +30,14 @@ public class EmployeeEntity implements Serializable {
   private String lastname;
   private String sex;
   private String address;
+  private String cinNumber;
+  private LocalDate cinDate;
+  private String cinLocation;
   @Lob
   private String image;
   private LocalDate birthdate;
-  @Column(unique = true)
   private String phone;
-  private String office;
+  private String post;
   @Column(unique = true)
   private String email;
   private int children;

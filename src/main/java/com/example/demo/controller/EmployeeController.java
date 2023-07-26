@@ -31,9 +31,13 @@ public class EmployeeController implements WebMvcConfigurer {
   @GetMapping("employee")
   public String List(Model model,
                      @RequestParam(defaultValue = "0", required = false)int page,
-                     @RequestParam(defaultValue = "15", required = false)int pageSize) {
-    List<EmployeeEntity> employees = service.getAll(page, pageSize);
-    model.addAttribute("employees", employees);
+                     @RequestParam(defaultValue = "15", required = false)int pageSize,
+                     @RequestParam(required = false, name = "sex")String sex,
+                     @RequestParam(required = false, name = "firstname")String firstname,
+                     @RequestParam(required = false, name = "lastname")String lastname,
+                     @RequestParam(required = false, name = "post")String post) {
+    List<EmployeeEntity> resultFilter = service.getWithFilter(firstname, lastname, sex, post, page, pageSize);
+    model.addAttribute("employees", resultFilter);
     return "employee";
   }
   @GetMapping("employee/create")
@@ -48,34 +52,45 @@ public class EmployeeController implements WebMvcConfigurer {
     model.addAttribute("employee", employee);
     return "detail";
   }
+  @GetMapping("employee/edit")
+  public String edit(@RequestParam(name = "employeeId")String id, Model model) {
+    EmployeeEntity employee = service.findById(id);
+    //EmployeeForm toUpdate = mapper.toForm(employee);
+    model.addAttribute("employee", employee);
+    return "edit";
+  }
+
+
+
+  @PostMapping("employee/edit")
+  public String editAction(@Valid @ModelAttribute EmployeeForm form, BindingResult bindingResult, Model model,
+                           @RequestParam("id")String id) {
+    form.setId(Long.valueOf(id));
+    return saveForm(form, bindingResult, model, form);
+  }
 
   @PostMapping("employee/new")
   public String postCreate(@Valid @ModelAttribute EmployeeForm form, BindingResult bindingResult, Model model) {
+    EmployeeForm initial = EmployeeForm.builder().build();
+    return saveForm(form, bindingResult, model, initial);
+  }
+
+  private String saveForm(
+      @ModelAttribute @Valid EmployeeForm form,
+      BindingResult bindingResult, Model model, EmployeeForm initial) {
+    System.out.println(bindingResult.getAllErrors());
     if (bindingResult.hasErrors()) {
-      System.out.println(bindingResult.getAllErrors()+"okok");
-      model.addAttribute("employee", EmployeeForm.builder().build());
+      model.addAttribute("employee", initial);
       model.addAttribute("errors", bindingResult.getAllErrors());
       return "create";
     }
     try {
       EmployeeEntity toSave = mapper.toEntity(form);
+
       service.save(toSave);
     }  catch (IOException e) {
       throw new RuntimeException(e);
     }
     return "redirect:/employee";
-  }
-
-  @PostMapping("employee/filter")
-  public String filter(Model model,
-                       @RequestParam(defaultValue = "0", required = false)int page,
-                       @RequestParam(defaultValue = "15", required = false)int pageSize,
-                       @RequestParam(required = false, name = "sex")String sex,
-                       @RequestParam(required = false, name = "firstname")String firstname,
-                       @RequestParam(required = false, name = "lastname")String lastname,
-                       @RequestParam(required = false, name = "office")String office) {
-    List<EmployeeEntity> resultFilter = service.getWithFilter(firstname, lastname, sex, office, page, pageSize);
-    model.addAttribute("employees", resultFilter);
-    return "employee";
   }
 }

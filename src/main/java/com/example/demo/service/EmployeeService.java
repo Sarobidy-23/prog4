@@ -36,10 +36,10 @@ public class EmployeeService {
   public List<EmployeeEntity> getWithFilter(String firstname,
                                             String lastname,
                                             String sex,
-                                            String office,
+                                            String post,
                                             int page, int pageSize) {
 
       Pageable pageable = PageRequest.of(page, pageSize);
-      return repository.getEmployeeEntitiesWithFilter(firstname, lastname, office,sex, pageable);
+      return repository.getEmployeeEntitiesWithFilter(firstname, lastname, post,sex, pageable);
   }
 }
