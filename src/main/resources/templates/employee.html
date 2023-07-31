@@ -3,90 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/style.css}">
     <title>Title</title>
 </head>
 <body>
     <h1>Employee lists</h1>
-    <form class="form-card px-3" th:action="@{/employee}" method="get" enctype="multipart/form-data">
-        <h5 class="text-center m-4">Filter</h5>
-        <div class="row text-left">
-            <div class="form-group flex-column d-flex m-2" >
-                <label class="form-control-label" for="sex">Sex</label>
-                <select id="sex" class="form-control" name="sex" th:value="${{sex}}">
-                    <option value="man">Man</option>
-                    <option value="woman">Woman</option>
-                </select>
-            </div>
-            <div class="form-group flex-column d-flex m-2">
-                <label class="form-control-label" for="firstname">Firstname</label>
-                <input class="form-control"
-                       name="firstname"
-                       type="text"
-                       th:value="${{firstname}}"
-                       id="firstname">
-            </div>
-            <div class="form-group flex-column d-flex m-2">
-                <label class="form-control-label" for="lastname">Lastname</label>
-                <input class="form-control"
-                       name="lastname"
-                       type="text"
-                       th:value="${{firstname}}"
-                       id="lastname">
-            </div>
-            <div class="form-group flex-column d-flex m-2">
-                <label class="form-control-label" for="entranceDateStart">Entrance Date Start:</label>
-                <input class="form-control"
-                       name="entranceDateStart"
-                       type="date"
-                       th:value="${{entranceDateStart}}"
-                       id="entranceDateStart">
-            </div>
-            <div class="form-group flex-column d-flex m-2">
-                <label class="form-control-label" for="entranceDateEnd">Entrance Date End:</label>
-                <input class="form-control"
-                       name="entranceDateEnd"
-                       type="date"
-                       th:value="${{entranceDateEnd}}"
-                       id="entranceDateEnd">
-            </div>
-            <div class="form-group flex-column d-flex m-2">
-                <label class="form-control-label" for="exitDateStart">Exit Date Start:</label>
-                <input class="form-control"
-                       name="exitDateStart"
-                       type="date"
-                       th:value="${{exitDateStart}}"
-                       id="exitDateStart">
-            </div>
-            <div class="form-group flex-column d-flex m-2">
-                <label class="form-control-label" for="exitDateEnd">Exit Date End:</label>
-                <input class="form-control"
-                       name="exitDateEnd"
-                       type="date"
-                       th:value="${{exitDateEnd}}"
-                       id="exitDateEnd">
-            </div>
-            <div class="form-group flex-column d-flex m-2">
-                <label class="form-control-label" for="post">Post</label>
-                <input class="form-control"
-                       name="post"
-                       type="text"
-                       th:value="${{post}}"
-                       id="post">
-            </div>
-            <button type="submit">filter</button>
-        </div>
-    </form>
     <a th:href="@{/employee/export}">Export csv</a>
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Post</th>
-                <th>Sex</th>
-                <th>Entrance date</th>
-                <th>Exit date</th>
-                <th>Actions</th>
+                <form th:action="@{/employee}" th:object="${employeeFilter}" method="get" enctype="multipart/form-data">
+                    <th>
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                Firstname
+                            <img th:src="@{/filter.svg}" alt="filter"></button>
+                            <div class="dropdown-menu">
+                                <input  class="form-control dropdown-item-text"
+                                        name="firstname"
+                                        type="text"
+                                        th:value="${{employeeFilter.firstname}}"
+                                        id="firstname">
+                                <select class="dropdown-item-text" th:value="${{employeeFilter.firstnameOrder}}" name="firstnameOrder">
+                                    <option value="">Order</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                Lastname
+                                <img th:src="@{/filter.svg}" alt="filter">
+                            </button>
+                            <div  class="dropdown-menu">
+                                <input  class="form-control dropdown-item-text"
+                                        name="lastname"
+                                        type="text"
+                                        th:value="${{employeeFilter.lastname}}"
+                                        id="lastname">
+                                <select class="dropdown-item-text" th:value="${{employeeFilter.lastnameOrder}}" name="lastnameOrder">
+                                    <option value="">Order</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                Post
+                                <img th:src="@{/filter.svg}" alt="filter"></button>
+                            <div class="dropdown-menu">
+                                <input  class="form-control dropdown-item-text"
+                                        name="post"
+                                        type="text"
+                                        th:value="${{employeeFilter.post}}"
+                                        id="post">
+                                <select class="dropdown-item-text" th:value="${{employeeFilter.postOrder}}" name="postOrder">
+                                    <option value="">Order</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                Sex
+                                <img th:src="@{/filter.svg}" alt="filter">
+                            </button>
+                            <div  class="dropdown-menu">
+                                <select  class="dropdown-item-text" name="sex" th:value="${{employeeFilter.sex}}">
+                                    <option value="">Choose</option>
+                                    <option value="Male">male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <select class="dropdown-item-text" th:value="${{employeeFilter.sexOrder}}" name="sexOrder">
+                                    <option value="">Order</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                Entrance date
+                                <img th:src="@{/filter.svg}" alt="filter">
+                            </button>
+                            <div  class="dropdown-menu">
+                                <label class="form-control-label" for="entranceDateStart">Entrance Date Start:</label>
+                                <input class="form-control"
+                                       name="entranceDateStart"
+                                       type="date"
+                                       th:value="${{employeeFilter.entranceDateStart}}"
+                                       id="entranceDateStart">
+                                <label class="form-control-label" for="entranceDateStart">Entrance Date End:</label>
+                                <input class="form-control"
+                                       name="entranceDateStart"
+                                       type="date"
+                                       th:value="${{employeeFilter.entranceDateEnd}}"
+                                       id="entranceDateEnd">
+                                <select class="dropdown-item-text" th:value="${{employeeFilter.entranceDateOrder}}" name="entranceDateOrder">
+                                    <option value="">Order</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                Exit date
+                                <img th:src="@{/filter.svg}" alt="filter">
+                            </button>
+                            <div  class="dropdown-menu">
+                                <label class="form-control-label" for="entranceDateStart">Exit Date Start:</label>
+                                <input class="form-control"
+                                       name="exitDateStart"
+                                       type="date"
+                                       th:value="${{employeeFilter.exitDateStart}}"
+                                       id="exitDateStart">
+                                <label class="form-control-label" for="entranceDateStart">Entrance Date End:</label>
+                                <input class="form-control"
+                                       name="exitDateStart"
+                                       type="date"
+                                       th:value="${{employeeFilter.exitDateEnd}}"
+                                       id="exitDateEnd">
+                                <select class="dropdown-item-text" th:value="${{employeeFilter.exitDateOrder}}" name="exitDateOrder">
+                                    <option value="">Order</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </th>
+                    <th>Actions</th>
+                    <button type="submit">filter</button>
+                </form>
             </tr>
         </thead>
         <tbody>
@@ -105,5 +166,6 @@
         </tbody>
     </table>
     <a th:href="@{/employee/create}">New employee</a>
+    <script th:src="@{/main.js}"></script>
 </body>
 </html>

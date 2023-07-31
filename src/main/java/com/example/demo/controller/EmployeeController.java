@@ -2,29 +2,20 @@ package com.example.demo.controller;
 
 import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.model.EmployeeEntity;
+import com.example.demo.model.EmployeeFilter;
 import com.example.demo.model.EmployeeForm;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.validator.EmployeeValidator;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,18 +35,10 @@ public class EmployeeController implements WebMvcConfigurer {
   public String List(Model model,
                      @RequestParam(defaultValue = "0", required = false)int page,
                      @RequestParam(defaultValue = "15", required = false)int pageSize,
-                     @RequestParam(required = false, name = "sex")String sex,
-                     @RequestParam(required = false, name = "firstname")String firstname,
-                     @RequestParam(required = false, name = "lastname")String lastname,
-                     @RequestParam(required = false, name = "post")String post,
-                     @RequestParam(required = false, name = "entranceDateStart")LocalDate entranceDateStart,
-                     @RequestParam(required = false, name = "entranceDateEnd")LocalDate entranceDateEnd,
-                     @RequestParam(required = false, name = "exitDateStart")LocalDate exitDateStart,
-                     @RequestParam(required = false, name = "exitDateEnd")LocalDate exitDateEnd,
-                     @RequestParam(required = false, name = "firstnameOrder")String firstnameOrder) {
-    List<EmployeeEntity> resultFilter = service.getWithFilter(firstname, lastname, sex, post,
-        entranceDateStart, entranceDateEnd, exitDateStart, exitDateEnd, page, pageSize);
+                     @ModelAttribute EmployeeFilter filter) {
+    List<EmployeeEntity> resultFilter = service.getWithFilter(filter, page, pageSize);
     model.addAttribute("employees", resultFilter);
+    model.addAttribute("employeeFilter", EmployeeFilter.builder().build());
     return "employee";
   }
   @GetMapping("employee/create")

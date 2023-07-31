@@ -21,7 +21,16 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, String
       "AND (cast(:entranceDateStart as date) IS NULL OR e.entrance_date >= :entranceDateStart) " +
       "AND (cast(:entranceDateEnd as date) IS NULL OR e.entrance_date <= :entranceDateEnd) " +
       "AND (cast(:exitDateStart as date) IS NULL OR e.exit_date >= :entranceDateStart) " +
-      "AND (cast(:exitDateEnd as date) IS NULL OR e.exit_date <= :exitDateEnd) ;"  ,nativeQuery = true)
+      "AND (cast(:exitDateEnd as date) IS NULL OR e.exit_date <= :exitDateEnd)" +
+      "ORDER BY " +
+      " CASE WHEN :firstnameOrder = 'desc' THEN e.firstname END DESC," +
+      " CASE WHEN :lastnameOrder = 'desc' THEN e.lastname END DESC," +
+      " CASE WHEN :sexOrder = 'desc' THEN e.sex END DESC," +
+      " CASE WHEN :postOrder = 'desc' THEN e.post END DESC," +
+      " CASE WHEN :entranceDateOrder = 'desc' THEN e.entrance_date END DESC," +
+      " CASE WHEN :exitDateOrder = 'desc' THEN e.exit_date END DESC," +
+      " e.firstname ASC, e.lastname ASC, e.sex ASC, e.post ASC, e.entrance_date ASC, e.exit_date ASC "
+      ,nativeQuery = true)
   List<EmployeeEntity> getEmployeeEntitiesWithFilter(@Param("firstname")String firstname,
                                          @Param("lastname")String lastname,
                                          @Param("post")String post,
@@ -30,5 +39,11 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, String
                                          @Param("entranceDateEnd")LocalDate entranceDateEnd,
                                          @Param("exitDateStart") LocalDate exitDateStart,
                                          @Param("exitDateEnd")LocalDate exitDateEnd,
+                                         @Param("firstnameOrder")String firstnameOrder,
+                                         @Param("lastnameOrder")String lastnameOrder,
+                                         @Param("sexOrder")String sexOrder,
+                                         @Param("postOrder")String postOrder,
+                                         @Param("entranceDateOrder")String entranceDateOrder,
+                                         @Param("exitDateOrder")String exitDateOrder,
                                          Pageable pageable);
 }

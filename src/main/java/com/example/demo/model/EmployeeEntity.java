@@ -48,7 +48,7 @@ public class EmployeeEntity implements Serializable {
   @Column(unique = true)
   private String matricule;
   public enum Sex {
-    man,
-    woman
+    Male,
+    Female
   }
 }
