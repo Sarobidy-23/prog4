@@ -5,6 +5,7 @@ import com.example.demo.model.EmployeeForm;
 import java.io.IOException;
 import java.util.Base64;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class EmployeeMapper {
@@ -51,25 +52,26 @@ public class EmployeeMapper {
         .build();
   }
 
-  public EmployeeForm toUpdate(EmployeeForm form, EmployeeEntity entity) {
-    EmployeeForm toUpdate = toForm(entity);
-    toUpdate.setId(form.getId());
-    toUpdate.setId(entity.getId());
-    toUpdate.setFirstname(entity.getFirstname());
-    toUpdate.setLastname(entity.getLastname());
-    toUpdate.setAddress(entity.getAddress());
-    toUpdate.setEmail(entity.getEmail());
-    toUpdate.setBirthdate(entity.getBirthdate());
-    toUpdate.setCinNumber(entity.getCinNumber());
-    toUpdate.setCinDate(entity.getCinDate());
-    toUpdate.setCinLocation(entity.getCinLocation());
-    toUpdate.setSex(entity.getSex());
-    toUpdate.setEntranceDate(entity.getEntranceDate());
-    toUpdate.setPost(entity.getPost());
-    toUpdate.setPhone(entity.getPhone());
-    toUpdate.setChildren(entity.getChildren());
-    toUpdate.setCnaps(entity.getCnaps());
-    toUpdate.setMatricule(entity.getMatricule());
-    return toUpdate;
+  public EmployeeEntity toUpdate(EmployeeForm form, EmployeeEntity entity) throws IOException {
+    entity.setFirstname(form.getFirstname());
+    entity.setLastname(form.getLastname());
+    entity.setAddress(form.getAddress());
+    entity.setEmail(form.getEmail());
+    entity.setImage(
+        form.getImage().getSize() >0 ? Base64.getEncoder().encodeToString(form.getImage().getBytes()) :
+        entity.getImage()
+    );
+    entity.setBirthdate(form.getBirthdate() == null ? entity.getBirthdate() : form.getBirthdate());
+    entity.setCinNumber(form.getCinNumber());
+    entity.setCinDate(form.getCinDate() == null ? entity.getCinDate() : form.getCinDate());
+    entity.setCinLocation(form.getCinLocation());
+    entity.setSex(form.getSex());
+    entity.setEntranceDate(form.getEntranceDate() == null ? entity.getEntranceDate() : form.getEntranceDate());
+    entity.setPost(form.getPost());
+    entity.setPhone(form.getPhone());
+    entity.setChildren(form.getChildren());
+    entity.setCnaps(form.getCnaps());
+    entity.setMatricule(form.getMatricule());
+    return entity;
   }
 }

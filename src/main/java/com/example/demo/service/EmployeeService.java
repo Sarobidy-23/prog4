@@ -36,22 +36,6 @@ public class EmployeeService {
     return repository.findAll();
   }
 
-  public Sort.Direction getSortDirection(String value) {
-    Sort.Direction direction = Sort.Direction.ASC;
-    if(!StringUtils.isBlank(value)) {
-      switch (value.toUpperCase()) {
-        case "ASC":
-          direction = Sort.Direction.ASC;
-          break;
-        case "DESC":
-          direction = Sort.Direction.DESC;
-          break;
-        default:
-          throw new IllegalArgumentException("Invalid sort direction value: " + value);
-      }
-    }
-    return direction;
-  }
   public List<EmployeeEntity> getWithFilter(EmployeeFilter filter,
                                             int page, int pageSize) {
 

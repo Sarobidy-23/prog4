@@ -6,9 +6,9 @@ import com.example.demo.model.EmployeeFilter;
 import com.example.demo.model.EmployeeForm;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.validator.EmployeeValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -56,8 +56,8 @@ public class EmployeeController implements WebMvcConfigurer {
   @GetMapping("employee/edit")
   public String edit(@RequestParam(name = "employeeId")String id, Model model) {
     EmployeeEntity employee = service.findById(id);
-    //EmployeeForm toUpdate = mapper.toForm(employee);
-    model.addAttribute("employee", employee);
+    EmployeeForm toUpdate = mapper.toForm(employee);
+    model.addAttribute("employee", toUpdate);
     return "edit";
   }
 
@@ -75,34 +75,34 @@ public class EmployeeController implements WebMvcConfigurer {
   }
 
   @PostMapping("employee/edit")
-  public String editAction(@Valid @ModelAttribute EmployeeForm form, BindingResult bindingResult, Model model,
-                           @RequestParam("id")String id) {
-    EmployeeEntity employee = service.findById(id);
-    EmployeeForm toSaved = mapper.toUpdate(form, employee);
-    String errors = validator.validateForm(form);
-    if (!errors.isEmpty()) {
-      ObjectError newError = new ObjectError("Global", errors);
-      bindingResult.addError(newError);
+  public String editAction(@Valid @ModelAttribute EmployeeForm form, BindingResult bindingResult,
+                           HttpServletRequest request, Model model, @RequestParam("id")String id) {
+    System.out.println(request.getParameter("countryCode"));
+    try {
+      EmployeeEntity employee = service.findById(id);
+      EmployeeEntity toSaved = mapper.toUpdate(form, employee);
+      EmployeeForm toUpdate = mapper.toForm(employee);
+      return saveForm(toSaved, bindingResult, model, toUpdate, "edit");
+    } catch (Exception error) {
+      throw new RuntimeException(error.getMessage());
     }
-    return saveForm(form, bindingResult, model, toSaved);
   }
 
   @PostMapping("employee/new")
   public String postCreate(@Valid @ModelAttribute EmployeeForm form, BindingResult bindingResult, Model model) {
     EmployeeForm initial = EmployeeForm.builder().build();
-    String errors = validator.validateForm(form);
-    if (!errors.isEmpty()) {
-      ObjectError newError = new ObjectError("Global", errors);
-      bindingResult.addError(newError);
+    try {
+      EmployeeEntity toSaved = mapper.toEntity(form);
+      return saveForm(toSaved, bindingResult, model, initial, "create");
+    } catch (Exception error) {
+      throw  new RuntimeException(error.getMessage());
     }
-    return saveForm(form, bindingResult, model, initial);
   }
 
-  private String saveForm(
-      @ModelAttribute @Valid EmployeeForm form,
-      BindingResult bindingResult, Model model, EmployeeForm initial) {
-    System.out.println(bindingResult.getAllErrors());
-    String errors = validator.validateForm(form);
+  private String saveForm(EmployeeEntity toSaved,
+                          BindingResult bindingResult, Model model, EmployeeForm initial,
+                          String viewTemplate) {
+    String errors = validator.validateForm(toSaved);
     if (!errors.isEmpty()) {
       ObjectError newError = new ObjectError("Global", errors);
       bindingResult.addError(newError);
@@ -110,15 +110,9 @@ public class EmployeeController implements WebMvcConfigurer {
     if (bindingResult.hasErrors()) {
       model.addAttribute("employee", initial);
       model.addAttribute("errors", bindingResult.getAllErrors());
-      return "create";
+      return viewTemplate;
     }
-    try {
-      EmployeeEntity toSave = mapper.toEntity(form);
-
-      service.save(toSave);
-    }  catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    service.save(toSaved);
     return "redirect:/employee";
   }
 
@@ -129,20 +123,20 @@ public class EmployeeController implements WebMvcConfigurer {
     for (EmployeeEntity employee : employeeList) {
       writer.println(
           employee.getFirstname() + separator +
-          employee.getLastname() + separator +
-          employee.getSex() + separator +
-          employee.getAddress() + separator +
-          employee.getPhone() + separator +
-          employee.getCnaps() + separator +
-          employee.getChildren() + separator +
-          employee.getEmail() + separator +
-          employee.getPost() + separator +
-          employee.getMatricule() + separator +
-          employee.getCinNumber() + separator +
-          employee.getCinDate() + separator +
-          employee.getCinLocation() + separator +
-          employee.getEntranceDate() + separator +
-          employee.getExitDate() + separator
+              employee.getLastname() + separator +
+              employee.getSex() + separator +
+              employee.getAddress() + separator +
+              employee.getPhone() + separator +
+              employee.getCnaps() + separator +
+              employee.getChildren() + separator +
+              employee.getEmail() + separator +
+              employee.getPost() + separator +
+              employee.getMatricule() + separator +
+              employee.getCinNumber() + separator +
+              employee.getCinDate() + separator +
+              employee.getCinLocation() + separator +
+              employee.getEntranceDate() + separator +
+              employee.getExitDate() + separator
       );
     }
   }

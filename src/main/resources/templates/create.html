@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/intlTelInput.css}">
     <title>Create</title>
 </head>
 <body>
@@ -11,7 +12,7 @@
         <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
             <div class="card">
                 <h5 class="text-center m-4">New employee</h5>
-                <form class="form-card px-3" th:action="@{/employee/new}" method="post" th:object="${employee}" enctype="multipart/form-data">
+                <form class="form-card px-3" id="form" th:action="@{/employee/new}" method="post" th:object="${employee}" enctype="multipart/form-data">
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="firstname">Firstname</label>
@@ -35,8 +36,8 @@
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="sex">Sex</label>
                             <select id="sex" class="form-control" th:field="*{sex}">
-                                <option value="man" selected>Man</option>
-                                <option value="woman">Woman</option>
+                                <option value="Male" selected>Male</option>
+                                <option value="Female">Female</option>
                             </select>
                         </div>
                         <div class="form-group col-sm-6 flex-column d-flex">
@@ -110,5 +111,7 @@
         </div>
     </div>
 </div>
+<script th:src="@{/js/intlTelInput.min.js}"></script>
+<script th:src="@{/js/insert.js}"></script>
 </body>
 </html>

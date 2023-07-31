@@ -16,7 +16,7 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, String
   @Query( value = "SELECT * FROM employee e " +
       "WHERE (:firstname IS NULL OR e.firstname ILIKE CONCAT('%', :firstname, '%')) " +
       "AND (:lastname IS NULL OR e.lastname ILIKE CONCAT('%', :lastname, '%')) " +
-      "AND (:sex IS NULL OR e.sex= :sex)" +
+      "AND (:sex IS NULL OR e.sex ILIKE CONCAT('%', :sex, '%'))" +
       "AND (:post IS NULL OR e.post ILIKE CONCAT('%', :post, '%')) " +
       "AND (cast(:entranceDateStart as date) IS NULL OR e.entrance_date >= :entranceDateStart) " +
       "AND (cast(:entranceDateEnd as date) IS NULL OR e.entrance_date <= :entranceDateEnd) " +

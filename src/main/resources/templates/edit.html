@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/intlTelInput.css}">
+    <link rel="stylesheet" th:href="@{/css/demo.css}"/>
     <title>Edit</title>
 </head>
 <body>
@@ -11,7 +13,7 @@
         <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
             <div class="card">
                 <h5 class="text-center m-4">Edit employee</h5>
-                <form class="form-card px-3" th:object="${employee}" th:action="@{/employee/edit}" method="post" enctype="multipart/form-data">
+                <form class="form-card px-3" id="form" th:object="${employee}" th:action="@{/employee/edit}" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="id">ID:</label>
                         <input type="number" class="form-control" id="id" name="id" th:field="*{id}" required readonly>
@@ -38,8 +40,8 @@
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="sex">Sex</label>
                             <select id="sex" class="form-control" th:field="*{sex}">
-                                <option value="man" selected>Man</option>
-                                <option value="woman">Woman</option>
+                                <option value="Male" selected>Male</option>
+                                <option value="Female">Female</option>
                             </select>
                         </div>
                         <div class="form-group col-sm-6 flex-column d-flex">
@@ -61,7 +63,7 @@
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="phone">Phone</label>
-                            <input class="form-control" type="text" id="phone" th:field="*{phone}">
+                            <input class="form-control" type="tel" id="phone" maxlength="19" th:field="*{phone}">
                         </div>
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="post">Post in entreprise</label>
@@ -114,5 +116,8 @@
         </div>
     </div>
 </div>
+<script th:src="@{/js/intlTelInput.min.js}"></script>
+<script th:src="@{/js/demo.js}"></script>
+<script th:src="@{/js/insert.js}"></script>
 </body>
 </html>
