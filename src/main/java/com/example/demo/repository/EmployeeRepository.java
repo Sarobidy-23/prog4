@@ -24,12 +24,17 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, String
       "AND (cast(:exitDateEnd as date) IS NULL OR e.exit_date <= :exitDateEnd)" +
       "ORDER BY " +
       " CASE WHEN :firstnameOrder = 'desc' THEN e.firstname END DESC," +
+      " CASE WHEN :firstnameOrder = 'asc' THEN e.firstname END asc ," +
       " CASE WHEN :lastnameOrder = 'desc' THEN e.lastname END DESC," +
+      " CASE WHEN :lastnameOrder = 'asc' THEN e.lastname END asc," +
       " CASE WHEN :sexOrder = 'desc' THEN e.sex END DESC," +
+      " CASE WHEN :sexOrder = 'asc' THEN e.sex END asc," +
       " CASE WHEN :postOrder = 'desc' THEN e.post END DESC," +
+      " CASE WHEN :postOrder = 'asc' THEN e.post END asc," +
       " CASE WHEN :entranceDateOrder = 'desc' THEN e.entrance_date END DESC," +
+      " CASE WHEN :entranceDateOrder = 'asc' THEN e.entrance_date END asc," +
       " CASE WHEN :exitDateOrder = 'desc' THEN e.exit_date END DESC," +
-      " e.firstname ASC, e.lastname ASC, e.sex ASC, e.post ASC, e.entrance_date ASC, e.exit_date ASC "
+      " CASE WHEN :exitDateOrder = 'asc' THEN e.exit_date END asc"
       ,nativeQuery = true)
   List<EmployeeEntity> getEmployeeEntitiesWithFilter(@Param("firstname")String firstname,
                                          @Param("lastname")String lastname,

@@ -8,10 +8,12 @@ import com.example.demo.service.EmployeeService;
 import com.example.demo.validator.EmployeeValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.io.PrintWriter;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Controller
 @RequestMapping("/")
 @AllArgsConstructor
+@Slf4j
 public class EmployeeController implements WebMvcConfigurer {
   private final EmployeeService service;
   private final EmployeeMapper mapper;
@@ -35,7 +38,9 @@ public class EmployeeController implements WebMvcConfigurer {
   public String List(Model model,
                      @RequestParam(defaultValue = "0", required = false)int page,
                      @RequestParam(defaultValue = "15", required = false)int pageSize,
-                     @ModelAttribute EmployeeFilter filter) {
+                     @ModelAttribute EmployeeFilter filter,
+                     HttpSession session) {
+    session.setAttribute("employeeFilter", filter);
     List<EmployeeEntity> resultFilter = service.getWithFilter(filter, page, pageSize);
     model.addAttribute("employees", resultFilter);
     model.addAttribute("employeeFilter", EmployeeFilter.builder().build());
@@ -63,10 +68,15 @@ public class EmployeeController implements WebMvcConfigurer {
 
   @GetMapping("employee/export")
   @ResponseBody
-  public void exportCSV(HttpServletResponse response) {
+  public void exportCSV(HttpServletResponse response,  HttpServletRequest request,
+                        @RequestParam(defaultValue = "0", required = false)int page,
+                        @RequestParam(defaultValue = "15", required = false)int pageSize) {
     response.setContentType("text/csv");
     response.setHeader("Content-Disposition", "attachment; filename=employeeList.csv");
-    List<EmployeeEntity> entities = service.getAll(1,15);
+    HttpSession session = request.getSession(false);
+    EmployeeFilter filter = (EmployeeFilter) session.getAttribute("employeeFilter");
+    List<EmployeeEntity> entities = service.getWithFilter(filter,page,pageSize);
+    log.info(entities.toString());
     try {
       CSVExporter(response.getWriter(), entities);
     } catch (Exception err) {
@@ -76,8 +86,7 @@ public class EmployeeController implements WebMvcConfigurer {
 
   @PostMapping("employee/edit")
   public String editAction(@Valid @ModelAttribute EmployeeForm form, BindingResult bindingResult,
-                           HttpServletRequest request, Model model, @RequestParam("id")String id) {
-    System.out.println(request.getParameter("countryCode"));
+                           Model model, @RequestParam("id")String id) {
     try {
       EmployeeEntity employee = service.findById(id);
       EmployeeEntity toSaved = mapper.toUpdate(form, employee);
