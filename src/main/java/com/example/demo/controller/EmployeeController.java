@@ -79,12 +79,11 @@ public class EmployeeController implements WebMvcConfigurer {
 
   @GetMapping("employee/export")
   @ResponseBody
-  public void exportCSV(HttpServletResponse response,  HttpServletRequest request,
+  public void exportCSV(HttpServletResponse response,  HttpSession session,
                         @RequestParam(defaultValue = "0", required = false)int page,
                         @RequestParam(defaultValue = "15", required = false)int pageSize) {
     response.setContentType("text/csv");
     response.setHeader("Content-Disposition", "attachment; filename=employeeList.csv");
-    HttpSession session = request.getSession(false);
     EmployeeFilter filter = (EmployeeFilter) session.getAttribute("employeeFilter");
     List<EmployeeEntity> entities = service.getWithFilter(filter,page,pageSize);
     log.info(entities.toString());

@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/intlTelInput.css}">
-    <link rel="stylesheet" th:href="@{/css/demo.css}"/>
     <title>Edit</title>
 </head>
 <body>
-<div th:insert="fragment/navbar.html :: companyLogo(${company})"></div>
+<div th:insert="~{fragment/navbar.html :: companyLogo(${company})}"></div>
 <div class="container-fluid px-1 py-5 mx-auto">
     <div class="row d-flex justify-content-center">
         <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
@@ -118,7 +117,6 @@
     </div>
 </div>
 <script th:src="@{/js/intlTelInput.min.js}"></script>
-<script th:src="@{/js/demo.js}"></script>
 <script th:src="@{/js/insert.js}"></script>
 </body>
 </html>
