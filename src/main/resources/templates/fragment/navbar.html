@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" th:fragment="companyLogo(props)">
+  <div class="container-fluid">
+    <div class="navbar-brand ">
+      <img width="70px" height="70px" th:src="'data:image/*;base64,'+${props.logo}">
+    </div>
+    <a class="navbar-brand" href="/employee" th:text="${props.name}"></a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/employee">Employee lists</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/employee/create">New employee</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <button >
+    <a href="/logout">Logout</a>
+  </button>
+</nav>

@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.mapper.EmployeeMapper;
+import com.example.demo.model.CompanyEntity;
 import com.example.demo.model.EmployeeEntity;
 import com.example.demo.model.EmployeeFilter;
 import com.example.demo.model.EmployeeForm;
+import com.example.demo.service.CompanyService;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.validator.EmployeeValidator;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +33,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AllArgsConstructor
 @Slf4j
 public class EmployeeController implements WebMvcConfigurer {
+  private final CompanyService companyService;
   private final EmployeeService service;
   private final EmployeeMapper mapper;
   private final EmployeeValidator validator;
@@ -41,6 +44,8 @@ public class EmployeeController implements WebMvcConfigurer {
                      @ModelAttribute EmployeeFilter filter,
                      HttpSession session) {
     session.setAttribute("employeeFilter", filter);
+    CompanyEntity company = companyService.getOne();
+    model.addAttribute("company", company);
     List<EmployeeEntity> resultFilter = service.getWithFilter(filter, page, pageSize);
     model.addAttribute("employees", resultFilter);
     model.addAttribute("employeeFilter", EmployeeFilter.builder().build());
@@ -48,6 +53,8 @@ public class EmployeeController implements WebMvcConfigurer {
   }
   @GetMapping("employee/create")
   public String Create(Model model) {
+    CompanyEntity company = companyService.getOne();
+    model.addAttribute("company", company);
     model.addAttribute("employee", EmployeeForm.builder().build());
     return "create";
   }
@@ -55,11 +62,15 @@ public class EmployeeController implements WebMvcConfigurer {
   @GetMapping("employee/details")
   public String details(@RequestParam(name = "employeeId") String id, Model model) {
     EmployeeEntity employee = service.findById(id);
+    CompanyEntity company = companyService.getOne();
+    model.addAttribute("company", company);
     model.addAttribute("employee", employee);
     return "detail";
   }
   @GetMapping("employee/edit")
   public String edit(@RequestParam(name = "employeeId")String id, Model model) {
+    CompanyEntity company = companyService.getOne();
+    model.addAttribute("company", company);
     EmployeeEntity employee = service.findById(id);
     EmployeeForm toUpdate = mapper.toForm(employee);
     model.addAttribute("employee", toUpdate);

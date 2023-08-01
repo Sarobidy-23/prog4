@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>comp</title>
+</head>
+<body>
+  <form class="form-card px-3" th:action="@{/company/create}" method="post" th:object="${company}" enctype="multipart/form-data">
+      <input class="form-control form-control-file" type="file" accept="image/*" th:field="*{logo}" name="logo" id="logo">
+      <input class="form-control" id="name" name="name" type="text" th:field="*{name}" placeholder="name">
+      <input class="form-control" id="slogan" name="slogan" type="text" th:field="*{slogan}" placeholder="slogan">
+      <input class="form-control" id="address" name="address" type="text" th:field="*{address}" placeholder="address">
+      <input class="form-control" id="email" name="email" type="text" th:field="*{email}" placeholder="email">
+      <input class="form-control" id="phone" name="phone" type="text" th:field="*{phone}" placeholder="phone">
+      <input class="form-control" id="nif" name="nif" type="text" th:field="*{nif}" placeholder="nif">
+      <input class="form-control" id="stat" name="stat" type="text" th:field="*{stat}" placeholder="stat">
+      <input class="form-control" id="rcs" name="rcs" type="text" th:field="*{rcs}" placeholder="rcs">
+      <button type="submit">Add</button>
+  </form>
+</body>
+</html>

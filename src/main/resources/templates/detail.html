@@ -6,6 +6,7 @@
     <title>Fiche</title>
 </head>
 <body>
+<div th:insert="fragment/navbar.html :: companyLogo(${company})"></div>
     <div th:object="${employee}">
         <img th:src="'data:image/*;base64,'+${{employee.image}}" alt="Aucune image">
         <h4>Firstname</h4>
