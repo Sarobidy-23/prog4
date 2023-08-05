@@ -3,7 +3,6 @@ const form = document.querySelector("#form")
 let country = window.intlTelInput(inputPhone, {
     utilsScript: "/js/utils.js",
     onlyCountries: ["mg","fr","us"],
-    initialCountry: 'mg',
 });
 
 form.addEventListener("submit",() => {

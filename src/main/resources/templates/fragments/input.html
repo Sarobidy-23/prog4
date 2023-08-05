@@ -1,0 +1,8 @@
+<div class="form-group col-sm-6 flex-column d-flex" th:fragment="inputFragment(type, label, name, field)">
+  <label class="form-control-label" th:for="${name}" th:text="${label}"></label>
+  <input class="form-control"
+         th:name="${name}"
+         th:value="${field}"
+         th:id="${name}"
+         th:type="${type}">
+</div>

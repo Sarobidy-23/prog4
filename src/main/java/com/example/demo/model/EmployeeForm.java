@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,7 @@ public class EmployeeForm {
   private String address;
   private MultipartFile image;
   private LocalDate birthdate;
+  @Max(value = 20)
   private String phone;
   private String post;
   private String cinNumber;
