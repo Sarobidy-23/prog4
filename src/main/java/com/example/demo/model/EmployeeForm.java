@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +26,7 @@ public class EmployeeForm {
   private String address;
   private MultipartFile image;
   private LocalDate birthdate;
-  @Max(value = 20)
-  private String phone;
+  private List<PhoneEntity> phones;
   private String post;
   private String cinNumber;
   private LocalDate cinDate;

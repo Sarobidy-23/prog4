@@ -8,7 +8,7 @@
     <title>Employee form</title>
 </head>
 <body>
-<div th:insert="fragments/navbar.html :: companyLogo(${company})"></div>
+<div th:insert="~{fragments/navbar.html :: companyLogo(${company})}"></div>
 
 <div class="container-fluid px-1 py-5 mx-auto">
     <div class="row d-flex justify-content-center">
@@ -20,8 +20,8 @@
                         <input type="hidden" class="form-control" id="id" name="id" th:field="*{id}">
                     </div>
                     <div class="row justify-content-between text-left">
-                        <div th:replace="fragments/input.html :: inputFragment('text','Firstname', 'firstname' , *{firstname})"></div>
-                        <div th:replace="fragments/input.html :: inputFragment('text','Lastname', 'lastname' , *{lastname})"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('text','Firstname', 'firstname' , *{firstname})}"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('text','Lastname', 'lastname' , *{lastname})}"></div>
                     </div>
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex">
@@ -31,7 +31,7 @@
                                 <option value="Female">Female</option>
                             </select>
                         </div>
-                        <div th:replace="fragments/input.html :: inputFragment('text','Address', 'address' , *{address})"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('text','Address', 'address' , *{address})}"></div>
                     </div>
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex">
@@ -39,33 +39,44 @@
                             <input class="form-control form-control-file" type="file" accept="image/*"
                                    th:value="*{image}"  name="image" id="image">
                         </div>
-                        <div th:replace="fragments/input.html :: inputFragment('date','Birthdate', 'birthdate' , *{birthdate})"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('date','Birthdate', 'birthdate' , *{birthdate})}"></div>
                     </div>
-                    <div class="row justify-content-between text-left">
-                        <div th:replace="fragments/input.html :: inputFragment('tel','Phone ', 'phone' , *{phone})"></div>
-                        <div th:replace="fragments/input.html :: inputFragment('text','Post in enterprise', 'post' , *{post})"></div>
+                    <div class="row justify-content-between text-left" id="phoneList">
+                        <div th:each="phoneEl, phoneStatus: *{phones}" >
+                            <input  type="hidden" th:field="*{phones[__${phoneStatus.index}__].id}">
+                            <input th:field="*{phones[__${phoneStatus.index}__].phoneWithCountry}" readonly>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex" th:fragment="inputFragment(type, label, name, field)">
+                            <label class="form-control-label" >Phone number</label>
+                            <input class="form-control phone"
+                                   type="tel"
+                                    id="phone">
+                        </div>
+                        <button type="button" class="btn btn-info" th:onclick="addPhone()">Add Phone</button>
                     </div>
+                    <div th:replace="~{fragments/input.html :: inputFragment('text','Post in enterprise', 'post' , *{post})}"></div>
+
                     <div class="row justify-content-between text-left">
-                        <div th:replace="fragments/input.html :: inputFragment('text','Email', 'email' , *{email})"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('text','Email', 'email' , *{email})}"></div>
                         <div class="form-group col-sm-6 flex-column d-flex">
                             <label class="form-control-label" for="children">Children</label>
                             <input class="form-control" type="number" id="children" min="0" th:field="*{children}">
                         </div>
                     </div>
                     <div class="row justify-content-between text-left">
-                        <div th:replace="fragments/input.html :: inputFragment('date','Entrance date', 'entranceDate' , *{entranceDate})"></div>
-                        <div th:replace="fragments/input.html :: inputFragment('date','Exit date', 'exitDate' , *{exitDate})"></div>
-                        <div th:replace="fragments/input.html :: inputFragment('text','Cnaps identifier', 'cnaps' , *{cnaps})"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('date','Entrance date', 'entranceDate' , *{entranceDate})}"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('date','Exit date', 'exitDate' , *{exitDate})}"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('text','Cnaps identifier', 'cnaps' , *{cnaps})}"></div>
                     </div>
                     <div class="row justify-content-between text-left">
-                        <div th:replace="fragments/input.html :: inputFragment('text','Matricule', 'matricule' , *{matricule})"></div>
-                        <div th:replace="fragments/input.html :: inputFragment('text','CIN number', 'cinNumber' , *{cinNumber})"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('text','Matricule', 'matricule' , *{matricule})}"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('text','CIN number', 'cinNumber' , *{cinNumber})}"></div>
                     </div>
                     <div class="row justify-content-between text-left">
-                        <div th:replace="fragments/input.html :: inputFragment('date','CIN delivrance date', 'cinDate' , *{cinDate})"></div>
-                        <div th:replace="fragments/input.html :: inputFragment('text','CIN delivrance location', 'cinLocation' , *{cinLocation})"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('date','CIN delivrance date', 'cinDate' , *{cinDate})}"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('text','CIN delivrance location', 'cinLocation' , *{cinLocation})}"></div>
                     </div>
-                    <button type="submit">Edit</button>
+                    <button type="submit" th:text="buttonLabel"></button>
                 </form>
             </div>
         </div>

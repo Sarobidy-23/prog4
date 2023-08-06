@@ -41,6 +41,7 @@ public class EmployeeController implements WebMvcConfigurer {
                      @RequestParam(defaultValue = "15", required = false)int pageSize,
                      @ModelAttribute EmployeeFilter filter,
                      HttpSession session) {
+    System.out.println(filter);
     session.setAttribute("employeeFilter", filter);
     CompanyEntity company = companyService.getOne();
     model.addAttribute("company", company);
@@ -53,6 +54,7 @@ public class EmployeeController implements WebMvcConfigurer {
   public String Create(Model model) {
     CompanyEntity company = companyService.getOne();
     model.addAttribute("company", company);
+    model.addAttribute("buttonLabel", "Create");
     model.addAttribute("employee", EmployeeForm.builder().build());
     model.addAttribute("title", "Add employee");
     model.addAttribute("endpoint", "new");
@@ -74,6 +76,7 @@ public class EmployeeController implements WebMvcConfigurer {
     EmployeeEntity employee = service.findById(id);
     EmployeeForm toUpdate = mapper.toForm(employee);
     model.addAttribute("employee", toUpdate);
+    model.addAttribute("buttonLabel", "Update");
     model.addAttribute("title", "Edit employee");
     model.addAttribute("endpoint", "edit");
     return "employeeForm";
@@ -92,7 +95,7 @@ public class EmployeeController implements WebMvcConfigurer {
     try {
       CSVExporter(response.getWriter(), entities);
     } catch (Exception err) {
-      throw new RuntimeException(err.getMessage());
+      throw new CustomError(err.getMessage());
     }
   }
 
@@ -103,7 +106,7 @@ public class EmployeeController implements WebMvcConfigurer {
       EmployeeEntity toSaved = mapper.toUpdate(form, employee);
       return saveForm(toSaved);
     } catch (Exception error) {
-      throw new RuntimeException(error.getMessage());
+      throw new CustomError(error.getMessage());
     }
   }
 
@@ -113,19 +116,19 @@ public class EmployeeController implements WebMvcConfigurer {
       EmployeeEntity toSaved = mapper.toEntity(form);
       return saveForm(toSaved);
     } catch (Exception exception) {
-      throw new RuntimeException(exception.getMessage());
+      throw new CustomError(exception.getMessage());
     }
   }
 
   private String saveForm(EmployeeEntity toSaved) {
   try {
     String errors = validator.validateForm(toSaved);
-    if (!errors.isEmpty()) {
-      throw new RuntimeException(errors);
+      if (!errors.isEmpty()) {
+        throw new CustomError(errors);
     }
     service.save(toSaved);
   } catch (Exception exception) {
-    throw new RuntimeException(exception.getMessage());
+    throw new CustomError(exception.getMessage());
   }
     return "redirect:/employee";
   }
@@ -140,7 +143,7 @@ public class EmployeeController implements WebMvcConfigurer {
               employee.getLastname() + separator +
               employee.getSex() + separator +
               employee.getAddress() + separator +
-              employee.getPhone() + separator +
+              employee.getPhones() + separator +
               employee.getCnaps() + separator +
               employee.getChildren() + separator +
               employee.getEmail() + separator +

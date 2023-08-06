@@ -23,7 +23,11 @@
             <p><strong>Cnaps :</strong> <span th:text="${{employee.cnaps}}"></span></p>
             <p><strong>Birthdate :</strong> <span th:text="${{employee.birthdate}}"></span></p>
             <p><strong>Post :</strong> <span th:text="${{employee.post}}"></span></p>
-            <p><strong>Phone :</strong><span th:text="${{employee.phone}}"></span></p>
+            <p><strong>Phone :</strong>
+                <div th:each="phone: *{employee.phones}">
+                    <span th:text="*{phone.phoneWithCountry}"></span>
+                 </div>
+            </p>
             <p><strong>Email :</strong>  <span th:text="${{employee.email}}"></span></p>
             <p><strong>Address :</strong>  <span th:text="${{employee.address}}"></span></p>
             <a th:href="@{/employee/edit(employeeId=${employee.id})}">Edit</a>

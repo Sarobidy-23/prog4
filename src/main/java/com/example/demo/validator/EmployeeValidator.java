@@ -1,39 +1,31 @@
 package com.example.demo.validator;
 
 import com.example.demo.model.EmployeeEntity;
-import com.example.demo.model.EmployeeForm;
 import java.util.regex.Pattern;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 public class EmployeeValidator {
+  private final PhoneValidator phoneValidator;
   public String validateForm(EmployeeEntity employeeForm) {
     String message = "";
     if (employeeForm.getFirstname().isEmpty()) {
-      message += "firstname invalid";
+      message += " firstname invalid, ";
     }
     if (employeeForm.getLastname().isEmpty()) {
-      message += "lastname invalid";
+      message += " lastname invalid, ";
     }
     if (!isAlphanumeric(employeeForm.getCnaps()) || employeeForm.getCnaps().isEmpty()) {
-      message += "invalid cnaps number";
-    }
-    String regPhone = "^\\+\\(\\d+\\)|\\s+";
-    if(employeeForm.getPhone().replaceAll(regPhone, "").length() > 9) {
-      message += "long length";
-      message += employeeForm.getPhone();
-    }
-
-    if(employeeForm.getPhone().replaceAll(regPhone, "").length() < 9) {
-      message += "min length";
-      message += employeeForm.getPhone();
-    }
-    if (employeeForm.getPhone().isEmpty()) {
-      message += " invalid phone ";
-      message += employeeForm.getPhone();
+      message += " invalid cnaps number ";
     }
     if (!isEmailTruthy(employeeForm.getEmail())) {
-      message += "invalid email";
+      message += " invalid email, ";
+    }
+    String phoneValidate = employeeForm.getPhones().stream().map(phoneValidator::validatePhone).toString();
+    if (!phoneValidate.isEmpty()) {
+      message += phoneValidate;
     }
     return message;
   }

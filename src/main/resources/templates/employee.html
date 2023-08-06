@@ -7,7 +7,7 @@
     <title>Title</title>
 </head>
 <body>
-<div th:insert="fragments/navbar.html :: companyLogo(${company})"></div>
+<div th:insert="~{fragments/navbar.html :: companyLogo(${company})}"></div>
 
     <h1>Employee lists</h1>
     <a th:href="@{/employee/export}">Export csv</a>
@@ -108,7 +108,7 @@
                                        id="entranceDateStart">
                                 <label class="form-control-label" for="entranceDateStart">Entrance Date End:</label>
                                 <input class="form-control"
-                                       name="entranceDateStart"
+                                       name="entranceDateEnd"
                                        type="date"
                                        th:value="${{employeeFilter.entranceDateEnd}}"
                                        id="entranceDateEnd">
@@ -135,7 +135,7 @@
                                        id="exitDateStart">
                                 <label class="form-control-label" for="entranceDateStart">Entrance Date End:</label>
                                 <input class="form-control"
-                                       name="exitDateStart"
+                                       name="exitDateEnd"
                                        type="date"
                                        th:value="${{employeeFilter.exitDateEnd}}"
                                        id="exitDateEnd">
