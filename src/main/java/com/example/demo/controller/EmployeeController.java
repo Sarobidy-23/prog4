@@ -41,7 +41,6 @@ public class EmployeeController implements WebMvcConfigurer {
                      @RequestParam(defaultValue = "15", required = false)int pageSize,
                      @ModelAttribute EmployeeFilter filter,
                      HttpSession session) {
-    System.out.println(filter);
     session.setAttribute("employeeFilter", filter);
     CompanyEntity company = companyService.getOne();
     model.addAttribute("company", company);

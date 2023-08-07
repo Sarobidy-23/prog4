@@ -1,11 +1,13 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -37,7 +39,8 @@ public class EmployeeEntity implements Serializable {
   @Lob
   private String image;
   private LocalDate birthdate;
-  @OneToMany(mappedBy = "employee")
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(referencedColumnName = "id", name = "employee_id")
   @JsonIgnore
   private List<PhoneEntity> phones;
   private String post;

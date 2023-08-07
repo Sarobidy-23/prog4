@@ -11,20 +11,20 @@ public class PhoneValidator {
   private final PhoneRepository repository;
   public String validatePhone (PhoneEntity phone) {
     PhoneEntity phonePersist = repository.getByPhoneWithCountry(phone.getPhoneWithCountry());
-    String message = "";
+    StringBuilder message = new StringBuilder();
     String regPhone = "^\\+\\(\\d+\\)|\\s+";
-    if (phonePersist != null) {
-      message += " phone already exist ";
-      message += phone.getPhoneWithCountry() + ",";
+    if (phonePersist != null && phone.getId() == null) {
+      message.append(" phone already exist ");
+      message.append(phone.getPhoneWithCountry()).append(",");
     }
     if(phone.getPhoneWithCountry().replaceAll(regPhone, "").length() != 9) {
-      message += " Phone numbe length is 9 ";
-      message += phone.getPhoneWithCountry() + ",";
+      message.append(" Phone number length is to be 9 after the country code ");
+      message.append(phone.getPhoneWithCountry()).append(",");
     }
     if (phone.getPhoneWithCountry().matches("[^0-9]")) {
-      message += "Phone's number must only contains digits. ";
-      message += phone.getPhoneWithCountry() + ",";
+      message.append("Phone's number must only contains digits. ");
+      message.append(phone.getPhoneWithCountry()).append(",");
     }
-    return message;
+    return message.toString();
   }
 }

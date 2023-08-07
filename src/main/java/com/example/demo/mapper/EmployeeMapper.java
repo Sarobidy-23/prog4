@@ -29,7 +29,7 @@ public class EmployeeMapper {
         .entranceDate(form.getEntranceDate())
         .exitDate(form.getExitDate())
         .post(form.getPost())
-        .phones(List.copyOf(form.getPhones().stream().map(this::phoneEntity).toList()))
+        .phones(form.getPhones())
         .children(form.getChildren())
         .cnaps(form.getCnaps())
         .matricule(form.getMatricule())

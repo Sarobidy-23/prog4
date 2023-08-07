@@ -1,6 +1,7 @@
 package com.example.demo.validator;
 
 import com.example.demo.model.EmployeeEntity;
+import java.util.List;
 import java.util.regex.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,24 +11,27 @@ import org.springframework.stereotype.Component;
 public class EmployeeValidator {
   private final PhoneValidator phoneValidator;
   public String validateForm(EmployeeEntity employeeForm) {
-    String message = "";
+    StringBuilder message = new StringBuilder();
     if (employeeForm.getFirstname().isEmpty()) {
-      message += " firstname invalid, ";
+      message.append(" firstname invalid, ");
     }
     if (employeeForm.getLastname().isEmpty()) {
-      message += " lastname invalid, ";
+      message.append(" lastname invalid, ");
     }
     if (!isAlphanumeric(employeeForm.getCnaps()) || employeeForm.getCnaps().isEmpty()) {
-      message += " invalid cnaps number ";
+      message.append(" invalid cnaps number ");
     }
     if (!isEmailTruthy(employeeForm.getEmail())) {
-      message += " invalid email, ";
+      message.append(" invalid email, ");
     }
-    String phoneValidate = employeeForm.getPhones().stream().map(phoneValidator::validatePhone).toString();
-    if (!phoneValidate.isEmpty()) {
-      message += phoneValidate;
+    List<String> phoneValidate = employeeForm.getPhones().stream().map(phoneValidator::validatePhone).toList();
+    for(String error: phoneValidate) {
+      message.append(error);
     }
-    return message;
+    if (employeeForm.getPhones().isEmpty()) {
+      message.append(" employee need one or more phone ");
+    }
+    return message.toString();
   }
 
   private Boolean isAlphanumeric(String string) {

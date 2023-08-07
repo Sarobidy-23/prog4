@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,14 +21,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
-@Table(name = "phone")
+@Table(name = "\"phone\"")
 public class PhoneEntity implements Serializable {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+  @Column(unique = true)
   private String phoneWithCountry;
-  @ManyToOne
-  @JoinColumn(name = "employee_id", insertable = false, updatable = false)
-  @JsonIgnore
-  private EmployeeEntity employee;
 }

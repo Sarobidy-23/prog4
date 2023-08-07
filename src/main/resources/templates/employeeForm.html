@@ -46,16 +46,18 @@
                             <input  type="hidden" th:field="*{phones[__${phoneStatus.index}__].id}">
                             <input th:field="*{phones[__${phoneStatus.index}__].phoneWithCountry}" readonly>
                         </div>
-                        <div class="form-group col-sm-6 flex-column d-flex" th:fragment="inputFragment(type, label, name, field)">
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex" >
                             <label class="form-control-label" >Phone number</label>
                             <input class="form-control phone"
                                    type="tel"
-                                    id="phone">
+                                   id="phone">
                         </div>
-                        <button type="button" class="btn btn-info" th:onclick="addPhone()">Add Phone</button>
+                        <div class="form-group col-sm-6 flex-column d-flex" >
+                            <button type="button" class="btn btn-info" th:onclick="addPhone()">Add Phone</button>
+                        </div>
                     </div>
-                    <div th:replace="~{fragments/input.html :: inputFragment('text','Post in enterprise', 'post' , *{post})}"></div>
-
                     <div class="row justify-content-between text-left">
                         <div th:replace="~{fragments/input.html :: inputFragment('text','Email', 'email' , *{email})}"></div>
                         <div class="form-group col-sm-6 flex-column d-flex">
@@ -67,6 +69,7 @@
                         <div th:replace="~{fragments/input.html :: inputFragment('date','Entrance date', 'entranceDate' , *{entranceDate})}"></div>
                         <div th:replace="~{fragments/input.html :: inputFragment('date','Exit date', 'exitDate' , *{exitDate})}"></div>
                         <div th:replace="~{fragments/input.html :: inputFragment('text','Cnaps identifier', 'cnaps' , *{cnaps})}"></div>
+                        <div th:replace="~{fragments/input.html :: inputFragment('text','Post in enterprise', 'post' , *{post})}"></div>
                     </div>
                     <div class="row justify-content-between text-left">
                         <div th:replace="~{fragments/input.html :: inputFragment('text','Matricule', 'matricule' , *{matricule})}"></div>
@@ -76,7 +79,7 @@
                         <div th:replace="~{fragments/input.html :: inputFragment('date','CIN delivrance date', 'cinDate' , *{cinDate})}"></div>
                         <div th:replace="~{fragments/input.html :: inputFragment('text','CIN delivrance location', 'cinLocation' , *{cinLocation})}"></div>
                     </div>
-                    <button type="submit" th:text="buttonLabel"></button>
+                    <button type="submit" th:text="${buttonLabel}"></button>
                 </form>
             </div>
         </div>

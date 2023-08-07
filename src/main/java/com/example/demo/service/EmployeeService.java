@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.model.EmployeeEntity;
 import com.example.demo.model.EmployeeFilter;
+import com.example.demo.model.PhoneEntity;
 import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.repository.PhoneRepository;
 import io.micrometer.common.util.StringUtils;
 import java.util.ArrayList;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +18,11 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class EmployeeService {
-  public final EmployeeRepository repository;
+  private final EmployeeRepository repository;
+  private final PhoneRepository phoneRepository;
 
-  public void save(EmployeeEntity toSave) {
-    repository.save(toSave);
+  public EmployeeEntity save(EmployeeEntity toSave) {
+    return repository.save(toSave);
   }
 
   public EmployeeEntity findById(String id) {
