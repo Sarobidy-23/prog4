@@ -8,29 +8,42 @@
 </head>
 <body>
 <div th:insert="fragments/navbar.html :: companyLogo(${company})"></div>
-<div class="container mt-5">
-    <div class="col">
-        <div class="col-md-4">
-            <img th:src="'data:image/*;base64,'+${{employee.image}}" alt="Image de profil" class="img-fluid rounded">
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img th:src="'data:image/*;base64,'+${{employee.image}}" alt="Image de profil" class="img-fluid rounded">
+            </div>
         </div>
-        <div class="col-md-8">
-            <h1>
-                <span th:text="${{employee.firstname}}"></span>
-                <span th:text="${{employee.lastname}}"></span>
-            </h1>
-            <p><strong>Sex :</strong> <span th:text="${{employee.sex}}"></span></p>
-            <p><strong>Matricule :</strong> <span th:text="${{employee.matricule}}"></span></p>
-            <p><strong>Cnaps :</strong> <span th:text="${{employee.cnaps}}"></span></p>
-            <p><strong>Birthdate :</strong> <span th:text="${{employee.birthdate}}"></span></p>
-            <p><strong>Post :</strong> <span th:text="${{employee.post}}"></span></p>
-            <p><strong>Phone :</strong>
-                <div th:each="phone: *{employee.phones}">
-                    <span th:text="*{phone.phoneWithCountry}"></span>
-                 </div>
-            </p>
-            <p><strong>Email :</strong>  <span th:text="${{employee.email}}"></span></p>
-            <p><strong>Address :</strong>  <span th:text="${{employee.address}}"></span></p>
-            <a th:href="@{/employee/edit(employeeId=${employee.id})}">Edit</a>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Employee Settings</h4>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">><strong>Firstname :</strong>  <span th:text="${{employee.firstname}}"></span></div>
+                    <div class="col-md-12">><strong>Lastname :</strong>  <span th:text="${{employee.lastname}}"></span></div>
+                    <div class="col-md-12">><strong>Sex :</strong> <span th:text="${{employee.sex}}"></span></div>
+                    <div class="col-md-12">><strong>Matricule :</strong> <span th:text="${{employee.matricule}}"></span></div>
+                    <div class="col-md-12">><strong>Cnaps :</strong> <span th:text="${{employee.cnaps}}"></span></div>
+                    <div class="col-md-12">><strong>Birthdate :</strong> <span th:text="${{employee.birthdate}}"></span></div>
+                    <div class="col-md-12">><strong>Post :</strong> <span th:text="${{employee.post}}"></span></div>
+                    <div class="col-md-12">><strong>Phone :</strong>
+                        <div th:each="phone: *{employee.phones}">
+                            <span th:text="*{phone.phoneWithCountry}"></span>
+                         </div>
+                    </div>
+                    <div class="col-md-12">><strong>CSP :</strong>  <span th:text="${{employee.csp}}"></span></div>
+                    <div class="col-md-12">><strong>Email :</strong>  <span th:text="${{employee.email}}"></span></div>
+                    <div class="col-md-12">><strong>Address :</strong>  <span th:text="${{employee.address}}"></span></div>
+                    <div class="col-md-12">><strong>Entrance date :</strong>  <span th:text="${{employee.entranceDate}}"></span></div>
+                    <div class="col-md-12">><strong>Hire date :</strong>  <span th:text="${{employee.exitDate}}"></span></div>
+                    <div class="col-md-12">><strong>CIN number :</strong>  <span th:text="${{employee.cinNumber}}"></span></div>
+                    <div class="col-md-12">><strong>CIN location delivrance :</strong>  <span th:text="${{employee.cinLocation}}"></span></div>
+                    <div class="col-md-12">><strong>CIN date delivrance :</strong>  <span th:text="${{employee.cinDate}}"></span></div>
+                    <a th:href="@{/employee/edit(employeeId=${employee.id})}">Edit</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

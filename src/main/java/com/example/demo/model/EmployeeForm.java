@@ -22,7 +22,7 @@ public class EmployeeForm {
   private String firstname;
   @NotEmpty(message = "Required field")
   private String lastname;
-  private String sex;
+  private EmployeeEntity.SexEnum sex;
   private String address;
   private MultipartFile image;
   private LocalDate birthdate;
@@ -39,4 +39,5 @@ public class EmployeeForm {
   private String cnaps;
   @NotEmpty
   private String matricule;
+  private EmployeeEntity.CspEnum csp;
 }
